@@ -11,13 +11,44 @@ class Ticket:
         self.source = source
         self.destination = destination
 
+    def __repr__(self):
+        return f'from: {self.source} to: {self.destination}'
+
 
 def reconstruct_trip(tickets, length):
     hashtable = HashTable(length)
     route = [None] * length
 
+    print(f'Tickets: {tickets}')
+    print(f'length: {length}')
+
     """
     YOUR CODE HERE
     """
+    # enumerate array for easy access to values
+    for i, v in enumerate(tickets):
+        # print(f'value: {v}')
+        src = v.source
+        to = v.destination
+        # hash all entries into hash table
+        hash_table_insert(hashtable, src, to)
+        # this is your starting point
+        route[0] = hash_table_retrieve(hashtable, 'NONE')
+
+    for i in range(length):
+        if i > 0:
+            destination = hash_table_retrieve(hashtable, route[i-1])
+            route[i] = destination
+
 
     return route
+
+ticket_1 = Ticket("NONE", "PDX")
+ticket_2 = Ticket("PDX", "DCA")
+ticket_3 = Ticket("DCA", "NONE")
+
+tickets = [ticket_1, ticket_2, ticket_3]
+
+expected = ["PDX", "DCA", "NONE"]
+
+print(reconstruct_trip(tickets, 3))
